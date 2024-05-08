@@ -2,6 +2,10 @@ package dk.sdu.mmmi.cbse.asteroid;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 /**
  *
  * @author Emil
@@ -39,5 +43,21 @@ public class Asteroid extends Entity {
         );
 
         setRadius((int)(t1*2.7));
+    }
+
+    @Override
+    public void updateScore() {
+        String endpointUrl = "http://localhost:8080/score?point=1";
+
+        try {
+            URL url = new URL(endpointUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            connection.getResponseCode();
+            connection.disconnect();
+        } catch (IOException e) {
+            System.out.println("Score system not available");
+        }
     }
 }

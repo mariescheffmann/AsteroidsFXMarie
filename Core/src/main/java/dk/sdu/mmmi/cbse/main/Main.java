@@ -1,10 +1,12 @@
 package dk.sdu.mmmi.cbse.main;
 
-import dk.sdu.mmmi.cbse.common.bullet.Bullet;
-import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.GameKeys;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.module.ModuleReference;
 import java.lang.module.ModuleDescriptor;
 import dk.sdu.mmmi.cbse.common.data.World;
@@ -14,7 +16,8 @@ import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 
 import java.lang.module.Configuration;
 import java.lang.module.ModuleFinder;
-import java.lang.reflect.Array;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -24,7 +27,6 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
@@ -39,9 +41,9 @@ public class Main extends Application {
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
     Pane gameWindow;
     private static ModuleLayer layer;
+    Text text;
 
     public static void main(String[] args) {
-
         Path pluginsDir = Paths.get("Split"); // Directory with plugins JARs
 
         // Search for plugins in the plugins directory
@@ -71,9 +73,25 @@ public class Main extends Application {
         launch(Main.class);
     }
 
+    public void updateScore() {
+        String endpointUrl = "http://localhost:8080/getScore";
+
+        try {
+            URL url = new URL(endpointUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            text.setText("Destroyed asteroids: " + reader.readLine());
+            connection.disconnect();
+        } catch (IOException e) {
+            text.setText("Score system unavailable");
+        }
+    }
+
     @Override
     public void start(Stage window) throws Exception {
-        Text text = new Text(10, 20, "Destroyed asteroids: 0");
+        text = new Text(10, 20, "Destroyed asteroids: 0");
         gameWindow = new Pane();
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
         gameWindow.getChildren().add(text);
@@ -124,7 +142,6 @@ public class Main extends Application {
         window.setScene(scene);
         window.setTitle("ASTEROIDS");
         window.show();
-
     }
 
     private void render() {
@@ -142,6 +159,7 @@ public class Main extends Application {
     }
 
     private void update() {
+        updateScore();
 
         // Update
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {

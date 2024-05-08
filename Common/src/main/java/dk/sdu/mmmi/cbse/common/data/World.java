@@ -26,6 +26,7 @@ public class World {
     public void removeEntity(Entity entity) {
         int splitableIndicator = entity.getSplitableIndicator();
         entityMap.remove(entity.getID());
+        entity.updateScore();
 
         if (splitableIndicator != 1) {
             Entity entity1 = entity.copy(entity);

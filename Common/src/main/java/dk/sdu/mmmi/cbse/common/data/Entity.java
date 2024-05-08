@@ -26,6 +26,10 @@ public class Entity implements Serializable {
         return e2;
     }
 
+    public void updateScore() {
+        // No points added
+    }
+
     public String getID() {
         return ID.toString();
     }
