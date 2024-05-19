@@ -13,6 +13,7 @@ public class Entity implements Serializable {
     private double rotation;
     private int radius;
     private int splitableIndicator = 1;
+    private int lives = 1;
 
     public Entity copy(Entity e1) {
         Entity e2 = new Entity();
@@ -74,7 +75,7 @@ public class Entity implements Serializable {
     }
 
     public int getRadius() {
-        return  radius;
+        return radius;
     }
 
     public void setSplitableIndicator(int splitableIndicator) {
@@ -85,6 +86,11 @@ public class Entity implements Serializable {
         return splitableIndicator;
     }
 
-    public void assemble() {
+    public int getLives(){
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
     }
 }

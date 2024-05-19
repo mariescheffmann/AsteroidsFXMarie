@@ -24,6 +24,11 @@ public class World {
     }
 
     public void removeEntity(Entity entity) {
+        if (entity.getLives() > 1) {
+            entity.setLives(entity.getLives() - 1);
+            return;
+        }
+
         int splitableIndicator = entity.getSplitableIndicator();
         entityMap.remove(entity.getID());
         entity.updateScore();
@@ -46,8 +51,6 @@ public class World {
             addEntity(entity1);
             addEntity(entity2);
         }
-
-
     }
 
     public Collection<Entity> getEntities() {

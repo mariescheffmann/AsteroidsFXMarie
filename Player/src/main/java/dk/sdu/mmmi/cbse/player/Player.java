@@ -12,7 +12,7 @@ public class Player extends Entity {
     private static Player player;
     private ServiceLoader<Player> loader;
 
-    public Player() {
+    private Player() {
         loader = ServiceLoader.load(Player.class);
     }
 

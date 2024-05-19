@@ -27,6 +27,7 @@ public class EnemyPlugin implements IGamePluginService {
         enemy.setY(100);
         enemy.setRotation(100);
         enemy.setRadius(10);
+        enemy.setLives(3);
         return enemy;
     }
 

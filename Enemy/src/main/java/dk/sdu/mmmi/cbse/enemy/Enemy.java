@@ -16,7 +16,7 @@ public class Enemy extends Entity {
     private long lastShot;
     private long shotInterval = 2000;
 
-    public Enemy() {
+    private Enemy() {
         loader = ServiceLoader.load(Enemy.class);
     }
 
