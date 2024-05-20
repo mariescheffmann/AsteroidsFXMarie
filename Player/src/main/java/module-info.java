@@ -11,4 +11,5 @@ module Player {
     uses dk.sdu.mmmi.cbse.player.Player;
     provides IGamePluginService with PlayerPlugin;
     provides IEntityProcessingService with PlayerControlSystem;
+    exports dk.sdu.mmmi.cbse.player;
 }
